@@ -7,7 +7,7 @@ services:
     name: ai-health-assistant
     runtime: docker
     plan: free
-    branch: mvp
+    branch: main
     healthCheckPath: /login.jsp
     envVars:
       - key: DB_HOST
