@@ -5,6 +5,7 @@
 A Java web application (Servlets, JSP, JDBC) that helps users track
 their daily medicines, maintain a personal health record, and chat
 with an AI Health Assistant powered by the Google Gemini API.
+Authentication is handled by **Supabase Auth**.
 
 ---
 
@@ -27,8 +28,9 @@ for all database access.
 
 ## 2. Features
 
-- Secure signup and login with hashed passwords (SHA-256) and
-  session-based authentication with logout support.
+- Secure signup and login via **Supabase Auth** (passwords are never
+  stored or hashed by this app) with Tomcat session-based
+  authentication and logout support.
 - Dashboard summarizing total medicines, today's medicines, and
   health record status.
 - Full CRUD (Create, Read, Update, Delete) for medicine reminders.
@@ -48,6 +50,7 @@ for all database access.
 | Frontend          | HTML5, CSS3, JavaScript, Bootstrap 5 |
 | Backend           | Java 21, JSP, Java Servlets, JDBC |
 | Database          | PostgreSQL (Supabase in production) |
+| Authentication    | Supabase Auth (GoTrue REST API) |
 | AI                | Google Gemini API (free tier) |
 | Server            | Apache Tomcat 10 (Docker) |
 | Hosting           | Render (Docker web service) |
@@ -89,23 +92,23 @@ medicine-ai/
 │   │   └── ChatbotServlet.java
 │   │
 │   ├── dao/
-│   │   ├── UserDao.java
+│   │   ├── ProfileDao.java
 │   │   ├── MedicineDao.java
 │   │   └── HealthRecordDao.java
 │   │
 │   ├── model/
-│   │   ├── User.java
+│   │   ├── UserProfile.java
 │   │   ├── Medicine.java
 │   │   └── HealthRecord.java
 │   │
 │   ├── service/
-│   │   ├── ChatbotService.java        (offline fallback)
-│   │   └── GeminiChatbotService.java  (Gemini API client)
+│   │   ├── ChatbotService.java         (offline fallback)
+│   │   ├── GeminiChatbotService.java   (Gemini API client)
+│   │   └── SupabaseAuthService.java    (Supabase Auth client)
 │   │
 │   └── util/
 │       ├── DBConnection.java
-│       ├── Constants.java
-│       └── PasswordUtil.java
+│       └── Constants.java
 │
 └── WebContent/
     ├── css/style.css
@@ -133,9 +136,16 @@ hard-coded or committed.
 | `DB_PASSWORD`     | Database password                        | `postgres`    |
 | `DB_SSLMODE`      | `disable` locally, `require` for Supabase| `disable`     |
 | `GEMINI_API_KEY`  | Google Gemini API key ([get one free](https://aistudio.google.com/apikey)) | — |
+| `SUPABASE_URL`    | Your Supabase project URL (Project Settings → API) | — |
+| `SUPABASE_ANON_KEY` | Your Supabase project's `anon` public key (Project Settings → API) | — |
 
-For local Docker, copy `.env.example` to `.env` and fill in
-`GEMINI_API_KEY`. The `.env` file is git-ignored.
+Note: `SUPABASE_URL`/`SUPABASE_ANON_KEY` are required even for local
+development — signup/login call Supabase Auth directly, there's no
+local mock. `DB_*` can still point at your local Postgres container;
+only authentication needs the real Supabase project.
+
+For local Docker, copy `.env.example` to `.env` and fill in the real
+values. The `.env` file is git-ignored.
 
 ---
 
@@ -144,7 +154,7 @@ For local Docker, copy `.env.example` to `.env` and fill in
 ```bash
 git clone git@github.com:divya-sukumaran/medicine-ai.git
 cd medicine-ai
-cp .env.example .env      # then put your GEMINI_API_KEY in .env
+cp .env.example .env      # then fill in GEMINI_API_KEY, SUPABASE_URL, SUPABASE_ANON_KEY
 docker compose up --build -d
 ```
 
@@ -158,12 +168,13 @@ To stop: `docker compose down` (add `-v` to also wipe the database).
 
 ## 8. Deploying to Render + Supabase
 
-### Step 1 — Supabase (database)
+### Step 1 — Supabase (database + authentication)
 
 1. Create a free project at [supabase.com](https://supabase.com).
 2. Open **SQL Editor**, paste the contents of `database/schema.sql`,
-   and run it. This creates the `users`, `medicines`, and
-   `health_records` tables.
+   and run it. This creates the `profiles`, `medicines`, and
+   `health_records` tables. (`profiles` is keyed by the same UUID
+   Supabase Auth assigns each user — see "Authentication" below.)
 3. Go to **Project Settings → Database → Connection string** and note
    the **Session pooler** credentials (host like
    `aws-0-<region>.pooler.supabase.com`, port `5432`, user like
@@ -172,6 +183,16 @@ To stop: `docker compose down` (add `-v` to also wipe the database).
    > Important: use the **pooler** host, not the direct
    > `db.<ref>.supabase.co` host — the direct host is IPv6-only and
    > Render's free tier cannot reach it.
+
+4. Go to **Project Settings → API** and note the **Project URL** and
+   the **anon public** key — these become `SUPABASE_URL` and
+   `SUPABASE_ANON_KEY`.
+5. (Optional but recommended for a live demo) Go to
+   **Authentication → Providers → Email** and turn **off**
+   "Confirm email" so new signups can log in immediately without
+   clicking an email link. Leave it on for a more production-like
+   flow — in that case the app tells the user to check their inbox
+   after signup.
 
 ### Step 2 — Render (application)
 
@@ -188,6 +209,8 @@ To stop: `docker compose down` (add `-v` to also wipe the database).
    - `DB_PASSWORD` = your Supabase database password
    - `DB_SSLMODE` = `require`
    - `GEMINI_API_KEY` = your Gemini key
+   - `SUPABASE_URL` = your Supabase project URL
+   - `SUPABASE_ANON_KEY` = your Supabase anon public key
 4. Deploy. Render builds the Dockerfile and gives you a free public
    domain like **`https://ai-health-assistant.onrender.com`** (you can
    attach a custom domain later in the service settings).
@@ -197,10 +220,20 @@ To stop: `docker compose down` (add `-v` to also wipe the database).
 
 ### Authentication
 
-Signup and login are built into the app itself: passwords are stored
-as SHA-256 hashes in the `users` table and sessions are managed by
-Tomcat. Supabase is used purely as the Postgres database, so no
-Supabase Auth configuration is required.
+Signup and login are handled entirely by **Supabase Auth**
+(`src/service/SupabaseAuthService.java` calls its REST API directly —
+no external auth library needed). This app never sees or stores a
+plain-text or hashed password:
+
+- **Register** → `RegisterServlet` calls Supabase Auth's `/signup`
+  endpoint, then inserts a row into the app's own `profiles` table
+  (name, email, phone) keyed by the UUID Supabase assigned the user.
+- **Login** → `LoginServlet` calls Supabase Auth's
+  `/token?grant_type=password` endpoint; on success it starts a
+  normal Tomcat session (`HttpSession`) holding the user's Supabase
+  UUID, name, and email.
+- **Medicines / health records** are stored in this app's own
+  Postgres tables, linked to the user via that same UUID.
 
 ---
 
@@ -222,8 +255,8 @@ Supabase Auth configuration is required.
 ## 10. Future Enhancements
 
 - Email/SMS notifications for medicine reminder times.
-- Password reset via email.
-- Stronger password hashing (bcrypt/argon2) with per-user salts.
+- Password reset / magic-link login (Supabase Auth already supports
+  this via `/recover` and `/magiclink`; not yet wired into the UI).
 - Export health record as a PDF.
 - Conversation history/context for the AI chatbot.
 - Admin panel for managing users.

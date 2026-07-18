@@ -26,6 +26,8 @@
     document.addEventListener("DOMContentLoaded", function () {
         attachValidation("loginForm");
         attachValidation("registerForm");
+        attachValidation("verifyOtpForm");
+        attachValidation("setPasswordForm");
         attachValidation("medicineForm");
         attachValidation("healthRecordForm");
     });

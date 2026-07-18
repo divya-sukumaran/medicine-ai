@@ -26,7 +26,7 @@ public class MedicineServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        Integer userId = getLoggedInUserId(request);
+        String userId = getLoggedInUserId(request);
         if (userId == null) {
             response.sendRedirect(request.getContextPath() + "/login.jsp");
             return;
@@ -53,7 +53,7 @@ public class MedicineServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        Integer userId = getLoggedInUserId(request);
+        String userId = getLoggedInUserId(request);
         if (userId == null) {
             response.sendRedirect(request.getContextPath() + "/login.jsp");
             return;
@@ -71,7 +71,7 @@ public class MedicineServlet extends HttpServlet {
     /**
      * Displays the list of medicines belonging to the logged-in user.
      */
-    private void listMedicines(HttpServletRequest request, HttpServletResponse response, int userId)
+    private void listMedicines(HttpServletRequest request, HttpServletResponse response, String userId)
             throws ServletException, IOException {
 
         List<Medicine> medicines = medicineDao.getMedicinesByUser(userId);
@@ -82,7 +82,7 @@ public class MedicineServlet extends HttpServlet {
     /**
      * Validates and saves a new medicine reminder for the logged-in user.
      */
-    private void addMedicine(HttpServletRequest request, HttpServletResponse response, int userId)
+    private void addMedicine(HttpServletRequest request, HttpServletResponse response, String userId)
             throws ServletException, IOException {
 
         Medicine medicine = buildMedicineFromRequest(request);
@@ -102,7 +102,7 @@ public class MedicineServlet extends HttpServlet {
     /**
      * Loads a single medicine for editing and forwards to the edit form.
      */
-    private void showEditForm(HttpServletRequest request, HttpServletResponse response, int userId)
+    private void showEditForm(HttpServletRequest request, HttpServletResponse response, String userId)
             throws ServletException, IOException {
 
         int medicineId = Integer.parseInt(request.getParameter("id"));
@@ -120,7 +120,7 @@ public class MedicineServlet extends HttpServlet {
     /**
      * Validates and applies changes to an existing medicine reminder.
      */
-    private void updateMedicine(HttpServletRequest request, HttpServletResponse response, int userId)
+    private void updateMedicine(HttpServletRequest request, HttpServletResponse response, String userId)
             throws ServletException, IOException {
 
         Medicine medicine = buildMedicineFromRequest(request);
@@ -142,7 +142,7 @@ public class MedicineServlet extends HttpServlet {
     /**
      * Deletes a medicine reminder owned by the logged-in user.
      */
-    private void deleteMedicine(HttpServletRequest request, HttpServletResponse response, int userId)
+    private void deleteMedicine(HttpServletRequest request, HttpServletResponse response, String userId)
             throws IOException {
 
         int medicineId = Integer.parseInt(request.getParameter("id"));
@@ -187,11 +187,11 @@ public class MedicineServlet extends HttpServlet {
      *
      * @return the user id, or null if no user is logged in
      */
-    private Integer getLoggedInUserId(HttpServletRequest request) {
+    private String getLoggedInUserId(HttpServletRequest request) {
         HttpSession session = request.getSession(false);
         if (session == null || session.getAttribute(Constants.SESSION_USER_ID) == null) {
             return null;
         }
-        return (Integer) session.getAttribute(Constants.SESSION_USER_ID);
+        return (String) session.getAttribute(Constants.SESSION_USER_ID);
     }
 }

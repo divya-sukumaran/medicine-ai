@@ -4,12 +4,13 @@ package model;
  * Represents a medicine reminder created by a user.
  * Dates are stored as ISO strings (yyyy-MM-dd) so this class can be
  * used directly by both the DAO layer and the JSP views without
- * extra conversion.
+ * extra conversion. {@code userId} is the owning user's Supabase
+ * Auth UUID (as text).
  */
 public class Medicine {
 
     private int id;
-    private int userId;
+    private String userId;
     private String medicineName;
     private String dosage;
     private String time;
@@ -20,7 +21,7 @@ public class Medicine {
     public Medicine() {
     }
 
-    public Medicine(int id, int userId, String medicineName, String dosage, String time,
+    public Medicine(int id, String userId, String medicineName, String dosage, String time,
                      String startDate, String endDate, String notes) {
         this.id = id;
         this.userId = userId;
@@ -40,11 +41,11 @@ public class Medicine {
         this.id = id;
     }
 
-    public int getUserId() {
+    public String getUserId() {
         return userId;
     }
 
-    public void setUserId(int userId) {
+    public void setUserId(String userId) {
         this.userId = userId;
     }
 

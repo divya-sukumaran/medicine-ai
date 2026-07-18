@@ -36,7 +36,7 @@ public class DashboardServlet extends HttpServlet {
             return;
         }
 
-        int userId = (int) session.getAttribute(Constants.SESSION_USER_ID);
+        String userId = (String) session.getAttribute(Constants.SESSION_USER_ID);
 
         int totalMedicines = medicineDao.countMedicinesByUser(userId);
         int todaysMedicines = medicineDao.countTodaysMedicines(userId);

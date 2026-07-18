@@ -27,7 +27,7 @@ public class HealthRecordServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        Integer userId = getLoggedInUserId(request);
+        String userId = getLoggedInUserId(request);
         if (userId == null) {
             response.sendRedirect(request.getContextPath() + "/login.jsp");
             return;
@@ -46,7 +46,7 @@ public class HealthRecordServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        Integer userId = getLoggedInUserId(request);
+        String userId = getLoggedInUserId(request);
         if (userId == null) {
             response.sendRedirect(request.getContextPath() + "/login.jsp");
             return;
@@ -99,11 +99,11 @@ public class HealthRecordServlet extends HttpServlet {
      *
      * @return the user id, or null if no user is logged in
      */
-    private Integer getLoggedInUserId(HttpServletRequest request) {
+    private String getLoggedInUserId(HttpServletRequest request) {
         HttpSession session = request.getSession(false);
         if (session == null || session.getAttribute(Constants.SESSION_USER_ID) == null) {
             return null;
         }
-        return (Integer) session.getAttribute(Constants.SESSION_USER_ID);
+        return (String) session.getAttribute(Constants.SESSION_USER_ID);
     }
 }

@@ -3,11 +3,12 @@ package model;
 /**
  * Represents the personal health record of a user, containing
  * basic medical information used for quick reference in emergencies.
+ * {@code userId} is the owning user's Supabase Auth UUID (as text).
  */
 public class HealthRecord {
 
     private int id;
-    private int userId;
+    private String userId;
     private String bloodGroup;
     private String height;
     private String weight;
@@ -18,7 +19,7 @@ public class HealthRecord {
     public HealthRecord() {
     }
 
-    public HealthRecord(int id, int userId, String bloodGroup, String height, String weight,
+    public HealthRecord(int id, String userId, String bloodGroup, String height, String weight,
                          String allergies, String medicalHistory, String emergencyContact) {
         this.id = id;
         this.userId = userId;
@@ -38,11 +39,11 @@ public class HealthRecord {
         this.id = id;
     }
 
-    public int getUserId() {
+    public String getUserId() {
         return userId;
     }
 
-    public void setUserId(int userId) {
+    public void setUserId(String userId) {
         this.userId = userId;
     }
 

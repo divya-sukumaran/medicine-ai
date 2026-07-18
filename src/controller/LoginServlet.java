@@ -1,9 +1,7 @@
 package controller;
 
-import dao.UserDao;
-import model.User;
+import service.SupabaseAuthService;
 import util.Constants;
-import util.PasswordUtil;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
@@ -16,14 +14,15 @@ import java.io.IOException;
 /**
  * Handles user login, logout, and session management.
  * Mapped to both "/login" and "/logout" (see web.xml).
+ * Credentials are verified by Supabase Auth, not by this application.
  */
 public class LoginServlet extends HttpServlet {
 
-    private final UserDao userDao = new UserDao();
+    private final SupabaseAuthService supabaseAuthService = new SupabaseAuthService();
 
     /**
-     * Validates login credentials and starts a new session for the user.
-     * If the request URL is "/logout", the current session is invalidated instead.
+     * Validates login credentials against Supabase Auth and starts a
+     * new session for the user.
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -38,18 +37,24 @@ public class LoginServlet extends HttpServlet {
             return;
         }
 
-        String hashedPassword = PasswordUtil.hash(password);
-        User user = userDao.validateLogin(email.trim(), hashedPassword);
+        if (!supabaseAuthService.isConfigured()) {
+            request.setAttribute("error",
+                    "Login is not available right now (authentication service is not configured).");
+            request.getRequestDispatcher("login.jsp").forward(request, response);
+            return;
+        }
 
-        if (user != null) {
+        try {
+            SupabaseAuthService.SignInResult result = supabaseAuthService.signIn(email.trim(), password);
+
             HttpSession session = request.getSession(true);
-            session.setAttribute(Constants.SESSION_USER_ID, user.getId());
-            session.setAttribute(Constants.SESSION_USER_NAME, user.getName());
-            session.setAttribute(Constants.SESSION_USER_EMAIL, user.getEmail());
+            session.setAttribute(Constants.SESSION_USER_ID, result.userId);
+            session.setAttribute(Constants.SESSION_USER_NAME, result.name);
+            session.setAttribute(Constants.SESSION_USER_EMAIL, result.email);
 
             response.sendRedirect(request.getContextPath() + "/dashboard");
-        } else {
-            request.setAttribute("error", "Invalid email or password.");
+        } catch (Exception e) {
+            request.setAttribute("error", e.getMessage());
             request.getRequestDispatcher("login.jsp").forward(request, response);
         }
     }

@@ -23,13 +23,13 @@ public class HealthRecordDao {
      * @param userId the id of the owning user
      * @return the user's {@link HealthRecord}, or null if none exists yet
      */
-    public HealthRecord getByUserId(int userId) {
+    public HealthRecord getByUserId(String userId) {
         String sql = "SELECT * FROM health_records WHERE user_id = ?";
 
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            stmt.setInt(1, userId);
+            stmt.setString(1, userId);
 
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
@@ -82,7 +82,7 @@ public class HealthRecordDao {
             stmt.setString(4, record.getAllergies());
             stmt.setString(5, record.getMedicalHistory());
             stmt.setString(6, record.getEmergencyContact());
-            stmt.setInt(7, record.getUserId());
+            stmt.setString(7, record.getUserId());
 
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
@@ -106,7 +106,7 @@ public class HealthRecordDao {
     }
 
     private void bindRecord(PreparedStatement stmt, HealthRecord record) throws SQLException {
-        stmt.setInt(1, record.getUserId());
+        stmt.setString(1, record.getUserId());
         stmt.setString(2, record.getBloodGroup());
         stmt.setString(3, record.getHeight());
         stmt.setString(4, record.getWeight());
@@ -121,7 +121,7 @@ public class HealthRecordDao {
     private HealthRecord mapRow(ResultSet rs) throws SQLException {
         return new HealthRecord(
                 rs.getInt("id"),
-                rs.getInt("user_id"),
+                rs.getString("user_id"),
                 rs.getString("blood_group"),
                 rs.getString("height"),
                 rs.getString("weight"),

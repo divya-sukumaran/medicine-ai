@@ -24,3 +24,7 @@ services:
         value: require
       - key: GEMINI_API_KEY
         sync: false
+      - key: SUPABASE_URL
+        sync: false # e.g. https://<project-ref>.supabase.co
+      - key: SUPABASE_ANON_KEY
+        sync: false # Project Settings > API > anon public key

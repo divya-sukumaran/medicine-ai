@@ -25,8 +25,12 @@ public class DBConnection {
     private static final String PASSWORD = env("DB_PASSWORD", "postgres");
     private static final String SSL_MODE = env("DB_SSLMODE", "disable");
 
+    // stringtype=unspecified lets a plain Java String be bound with setString()
+    // to a UUID column (used for profiles.id / medicines.user_id / etc.),
+    // instead of requiring java.util.UUID objects everywhere.
     private static final String URL =
-            "jdbc:postgresql://" + HOST + ":" + PORT + "/" + DATABASE + "?sslmode=" + SSL_MODE;
+            "jdbc:postgresql://" + HOST + ":" + PORT + "/" + DATABASE
+                    + "?sslmode=" + SSL_MODE + "&stringtype=unspecified";
 
     static {
         try {

@@ -30,7 +30,7 @@ public class MedicineDao {
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            stmt.setInt(1, medicine.getUserId());
+            stmt.setString(1, medicine.getUserId());
             stmt.setString(2, medicine.getMedicineName());
             stmt.setString(3, medicine.getDosage());
             stmt.setString(4, medicine.getTime());
@@ -66,7 +66,7 @@ public class MedicineDao {
             stmt.setDate(5, Date.valueOf(medicine.getEndDate()));
             stmt.setString(6, medicine.getNotes());
             stmt.setInt(7, medicine.getId());
-            stmt.setInt(8, medicine.getUserId());
+            stmt.setString(8, medicine.getUserId());
 
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
@@ -82,14 +82,14 @@ public class MedicineDao {
      * @param userId     the id of the owning user
      * @return true if the delete succeeded
      */
-    public boolean deleteMedicine(int medicineId, int userId) {
+    public boolean deleteMedicine(int medicineId, String userId) {
         String sql = "DELETE FROM medicines WHERE id = ? AND user_id = ?";
 
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setInt(1, medicineId);
-            stmt.setInt(2, userId);
+            stmt.setString(2, userId);
 
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
@@ -105,14 +105,14 @@ public class MedicineDao {
      * @param userId     the id of the owning user
      * @return the matching {@link Medicine}, or null if not found
      */
-    public Medicine getMedicineById(int medicineId, int userId) {
+    public Medicine getMedicineById(int medicineId, String userId) {
         String sql = "SELECT * FROM medicines WHERE id = ? AND user_id = ?";
 
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setInt(1, medicineId);
-            stmt.setInt(2, userId);
+            stmt.setString(2, userId);
 
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
@@ -131,14 +131,14 @@ public class MedicineDao {
      * @param userId the id of the owning user
      * @return a list of the user's medicines
      */
-    public List<Medicine> getMedicinesByUser(int userId) {
+    public List<Medicine> getMedicinesByUser(String userId) {
         List<Medicine> medicines = new ArrayList<>();
         String sql = "SELECT * FROM medicines WHERE user_id = ? ORDER BY start_date DESC";
 
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            stmt.setInt(1, userId);
+            stmt.setString(1, userId);
 
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
@@ -157,13 +157,13 @@ public class MedicineDao {
      * @param userId the id of the owning user
      * @return the total medicine count
      */
-    public int countMedicinesByUser(int userId) {
+    public int countMedicinesByUser(String userId) {
         String sql = "SELECT COUNT(*) AS total FROM medicines WHERE user_id = ?";
 
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            stmt.setInt(1, userId);
+            stmt.setString(1, userId);
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
                     return rs.getInt("total");
@@ -182,14 +182,14 @@ public class MedicineDao {
      * @param userId the id of the owning user
      * @return the count of medicines active today
      */
-    public int countTodaysMedicines(int userId) {
+    public int countTodaysMedicines(String userId) {
         String sql = "SELECT COUNT(*) AS total FROM medicines WHERE user_id = ? "
                 + "AND CURRENT_DATE BETWEEN start_date AND end_date";
 
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            stmt.setInt(1, userId);
+            stmt.setString(1, userId);
 
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
@@ -208,7 +208,7 @@ public class MedicineDao {
     private Medicine mapRow(ResultSet rs) throws SQLException {
         return new Medicine(
                 rs.getInt("id"),
-                rs.getInt("user_id"),
+                rs.getString("user_id"),
                 rs.getString("medicine_name"),
                 rs.getString("dosage"),
                 rs.getString("time"),

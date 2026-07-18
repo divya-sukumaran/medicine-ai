@@ -23,6 +23,7 @@
             <% } %>
 
             <form action="${pageContext.request.contextPath}/register" method="post" id="registerForm" novalidate>
+                <input type="hidden" name="step" value="details">
                 <div class="mb-3">
                     <label class="form-label" for="name">Full Name</label>
                     <input type="text" class="form-control" id="name" name="name"
@@ -35,20 +36,14 @@
                            placeholder="you@example.com" required>
                     <div class="invalid-feedback">Please enter a valid email address.</div>
                 </div>
-                <div class="mb-3">
+                <div class="mb-4">
                     <label class="form-label" for="phone">Phone Number</label>
                     <input type="tel" class="form-control" id="phone" name="phone"
                            placeholder="10-digit mobile number" pattern="[0-9]{10}" required>
                     <div class="invalid-feedback">Please enter a valid 10-digit phone number.</div>
                 </div>
-                <div class="mb-4">
-                    <label class="form-label" for="password">Password</label>
-                    <input type="password" class="form-control" id="password" name="password"
-                           placeholder="At least 6 characters" minlength="6" required>
-                    <div class="invalid-feedback">Password must be at least 6 characters.</div>
-                </div>
                 <button type="submit" class="btn btn-primary w-100 py-2">
-                    Create account <i class="bi bi-arrow-right ms-1"></i>
+                    Send verification code <i class="bi bi-arrow-right ms-1"></i>
                 </button>
             </form>
 
