@@ -1,0 +1,30 @@
+# Render Blueprint - deploys the Dockerized Tomcat app as a web service.
+# Connect this repo in the Render dashboard (New > Blueprint) and fill in
+# the environment variable values when prompted. The database itself is
+# hosted on Supabase (see README section "Deploying to Render + Supabase").
+services:
+  - type: web
+    name: ai-health-assistant
+    runtime: docker
+    plan: free
+    branch: main
+    healthCheckPath: /login.jsp
+    envVars:
+      - key: DB_HOST
+        sync: false # Supabase pooler host, e.g. aws-0-<region>.pooler.supabase.com
+      - key: DB_PORT
+        sync: false # 5432 (session pooler) or 6543 (transaction pooler)
+      - key: DB_NAME
+        sync: false # usually "postgres" on Supabase
+      - key: DB_USER
+        sync: false # e.g. postgres.<project-ref>
+      - key: DB_PASSWORD
+        sync: false
+      - key: DB_SSLMODE
+        value: require
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: SUPABASE_URL
+        sync: false # e.g. https://<project-ref>.supabase.co
+      - key: SUPABASE_ANON_KEY
+        sync: false # Project Settings > API > anon public key
