@@ -1,0 +1,541 @@
+/* ============================================================
+   AI Health Assistant - Global Stylesheet
+   Modern healthcare theme built on top of Bootstrap 5
+   ============================================================ */
+
+:root {
+    --color-primary: #2563EB;
+    --color-primary-dark: #1D4ED8;
+    --color-secondary: #10B981;
+    --color-accent: #06B6D4;
+    --color-ink: #0F172A;
+    --color-muted: #64748B;
+    --color-border: #E2E8F0;
+    --color-surface: #FFFFFF;
+    --color-background: #F6F8FB;
+    --gradient-brand: linear-gradient(135deg, #2563EB 0%, #06B6D4 100%);
+    --shadow-card: 0 1px 2px rgba(15, 23, 42, 0.04), 0 8px 24px rgba(15, 23, 42, 0.06);
+    --shadow-card-hover: 0 2px 4px rgba(15, 23, 42, 0.06), 0 16px 40px rgba(37, 99, 235, 0.14);
+    --radius-card: 16px;
+}
+
+body {
+    background-color: var(--color-background);
+    color: var(--color-ink);
+    font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+    -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-weight: 700;
+    letter-spacing: -0.02em;
+}
+
+.text-muted {
+    color: var(--color-muted) !important;
+}
+
+/* ---------------- Navbar ---------------- */
+
+.app-navbar {
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--color-border);
+    position: sticky;
+    top: 0;
+    z-index: 1030;
+}
+
+.brand-mark {
+    width: 38px;
+    height: 38px;
+    border-radius: 12px;
+    background: var(--gradient-brand);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 1.15rem;
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.35);
+}
+
+.app-navbar .navbar-brand {
+    color: var(--color-ink);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+}
+
+.app-navbar .nav-link {
+    color: var(--color-muted);
+    font-weight: 600;
+    font-size: 0.925rem;
+    padding: 0.45rem 0.95rem;
+    border-radius: 999px;
+    transition: color 0.15s ease, background-color 0.15s ease;
+}
+
+.app-navbar .nav-link:hover {
+    color: var(--color-primary);
+    background-color: rgba(37, 99, 235, 0.07);
+}
+
+.app-navbar .nav-link.active {
+    color: var(--color-primary);
+    background-color: rgba(37, 99, 235, 0.1);
+}
+
+.btn-logout {
+    border: 1px solid var(--color-border);
+    border-radius: 999px;
+    font-weight: 600;
+    font-size: 0.875rem;
+    color: var(--color-muted);
+    padding: 0.4rem 1rem;
+    background: var(--color-surface);
+    transition: all 0.15s ease;
+}
+
+.btn-logout:hover {
+    color: #DC2626;
+    border-color: #FECACA;
+    background: #FEF2F2;
+}
+
+/* ---------------- Cards ---------------- */
+
+.card {
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-card);
+    box-shadow: var(--shadow-card);
+    background: var(--color-surface);
+}
+
+.card-hover {
+    transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+}
+
+.card-hover:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-card-hover);
+    border-color: rgba(37, 99, 235, 0.25);
+}
+
+/* ---------------- Page headers ---------------- */
+
+.page-title {
+    font-size: 1.5rem;
+    margin-bottom: 0.15rem;
+}
+
+.page-subtitle {
+    color: var(--color-muted);
+    font-size: 0.95rem;
+}
+
+/* ---------------- Dashboard stat cards ---------------- */
+
+.stat-card .card-body {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.25rem;
+}
+
+.stat-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: 14px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+    flex-shrink: 0;
+}
+
+.stat-icon.blue   { background: #EFF6FF; color: var(--color-primary); }
+.stat-icon.green  { background: #ECFDF5; color: var(--color-secondary); }
+.stat-icon.violet { background: #F5F3FF; color: #7C3AED; }
+.stat-icon.cyan   { background: #ECFEFF; color: #0891B2; }
+
+.stat-value {
+    font-size: 1.6rem;
+    font-weight: 800;
+    line-height: 1.1;
+    margin-bottom: 0;
+}
+
+.stat-label {
+    color: var(--color-muted);
+    font-size: 0.82rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin-bottom: 0.15rem;
+}
+
+/* ---------------- Buttons ---------------- */
+
+.btn {
+    font-weight: 600;
+    border-radius: 10px;
+}
+
+.btn-primary {
+    background: var(--gradient-brand);
+    border: none;
+    box-shadow: 0 4px 14px rgba(37, 99, 235, 0.3);
+    transition: filter 0.15s ease, transform 0.15s ease;
+}
+
+.btn-primary:hover {
+    background: var(--gradient-brand);
+    filter: brightness(1.06);
+    transform: translateY(-1px);
+}
+
+.btn-outline-secondary {
+    border-color: var(--color-border);
+    color: var(--color-muted);
+}
+
+/* ---------------- Forms ---------------- */
+
+.form-label {
+    font-weight: 600;
+    font-size: 0.875rem;
+    color: var(--color-ink);
+}
+
+.form-control,
+.form-select {
+    border-radius: 10px;
+    border-color: var(--color-border);
+    padding: 0.6rem 0.85rem;
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 0.2rem rgba(37, 99, 235, 0.12);
+}
+
+/* ---------------- Auth pages (login / register) ---------------- */
+
+.auth-page {
+    min-height: 100vh;
+    padding: 2rem 1rem;
+    background-color: var(--color-background);
+    background-image:
+        radial-gradient(600px 400px at 15% 10%, rgba(37, 99, 235, 0.14), transparent 60%),
+        radial-gradient(600px 400px at 85% 90%, rgba(16, 185, 129, 0.12), transparent 60%),
+        radial-gradient(500px 350px at 90% 15%, rgba(6, 182, 212, 0.1), transparent 60%);
+}
+
+.auth-card {
+    width: 100%;
+    max-width: 430px;
+    border-radius: 20px;
+}
+
+.auth-brand-mark {
+    width: 56px;
+    height: 56px;
+    border-radius: 16px;
+    background: var(--gradient-brand);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 1.6rem;
+    box-shadow: 0 8px 20px rgba(37, 99, 235, 0.35);
+}
+
+/* ---------------- Tables ---------------- */
+
+.table thead th {
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-muted);
+    border-bottom-width: 1px;
+}
+
+.table tbody td {
+    padding-top: 0.85rem;
+    padding-bottom: 0.85rem;
+    vertical-align: middle;
+}
+
+.badge-soft-blue {
+    background: #EFF6FF;
+    color: var(--color-primary);
+    font-weight: 600;
+    border-radius: 999px;
+    padding: 0.4em 0.8em;
+}
+
+.badge-soft-green {
+    background: #ECFDF5;
+    color: #059669;
+    font-weight: 600;
+    border-radius: 999px;
+    padding: 0.4em 0.8em;
+}
+
+/* ---------------- Empty states ---------------- */
+
+.empty-state {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: var(--color-muted);
+}
+
+.empty-state i {
+    font-size: 2.6rem;
+    color: #CBD5E1;
+    display: block;
+    margin-bottom: 0.75rem;
+}
+
+/* ---------------- Health record summary ---------------- */
+
+.record-chip {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 14px;
+    padding: 0.9rem 1.1rem;
+    height: 100%;
+}
+
+.record-chip .chip-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.15rem;
+    flex-shrink: 0;
+}
+
+.chip-icon.red    { background: #FEF2F2; color: #DC2626; }
+.chip-icon.blue   { background: #EFF6FF; color: var(--color-primary); }
+.chip-icon.green  { background: #ECFDF5; color: var(--color-secondary); }
+.chip-icon.amber  { background: #FFFBEB; color: #D97706; }
+
+.record-chip .chip-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--color-muted);
+    margin-bottom: 0.05rem;
+}
+
+.record-chip .chip-value {
+    font-weight: 700;
+    font-size: 1rem;
+}
+
+/* ---------------- Chatbot ---------------- */
+
+.chat-card {
+    overflow: hidden;
+}
+
+.chat-header {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid var(--color-border);
+    background: var(--color-surface);
+}
+
+.chat-avatar {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: var(--gradient-brand);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 1.15rem;
+    flex-shrink: 0;
+}
+
+.chat-status {
+    font-size: 0.8rem;
+    color: var(--color-secondary);
+    font-weight: 600;
+}
+
+.chat-status::before {
+    content: "";
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--color-secondary);
+    margin-right: 0.35rem;
+    vertical-align: middle;
+}
+
+.chat-window {
+    height: 420px;
+    overflow-y: auto;
+    background-color: var(--color-background);
+    padding: 1.25rem;
+}
+
+.chat-row {
+    display: flex;
+    align-items: flex-end;
+    gap: 0.6rem;
+    margin-bottom: 1rem;
+}
+
+.chat-row.user {
+    flex-direction: row-reverse;
+}
+
+.chat-row .row-avatar {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.85rem;
+    flex-shrink: 0;
+}
+
+.chat-row.bot .row-avatar {
+    background: var(--gradient-brand);
+    color: #fff;
+}
+
+.chat-row.user .row-avatar {
+    background: #E2E8F0;
+    color: var(--color-muted);
+}
+
+.chat-message {
+    max-width: 72%;
+    padding: 0.7rem 1rem;
+    border-radius: 16px;
+    line-height: 1.5;
+    font-size: 0.95rem;
+}
+
+.chat-row.user .chat-message {
+    background: var(--gradient-brand);
+    color: #fff;
+    border-bottom-right-radius: 4px;
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+}
+
+.chat-row.bot .chat-message {
+    background: var(--color-surface);
+    color: var(--color-ink);
+    border: 1px solid var(--color-border);
+    border-bottom-left-radius: 4px;
+}
+
+/* Typing indicator: three pulsing dots */
+.typing-dots {
+    display: inline-flex;
+    gap: 5px;
+    align-items: center;
+}
+
+.typing-dots span {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #94A3B8;
+    animation: typing-bounce 1.2s infinite ease-in-out;
+}
+
+.typing-dots span:nth-child(2) { animation-delay: 0.15s; }
+.typing-dots span:nth-child(3) { animation-delay: 0.3s; }
+
+@keyframes typing-bounce {
+    0%, 60%, 100% { transform: translateY(0); opacity: 0.5; }
+    30% { transform: translateY(-4px); opacity: 1; }
+}
+
+/* Quick-suggestion chips under the chat window */
+.chat-suggestions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    padding: 0.85rem 1.25rem 0;
+}
+
+.suggestion-chip {
+    border: 1px solid var(--color-border);
+    background: var(--color-surface);
+    color: var(--color-muted);
+    border-radius: 999px;
+    font-size: 0.83rem;
+    font-weight: 600;
+    padding: 0.35rem 0.9rem;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.suggestion-chip:hover {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+    background: #EFF6FF;
+}
+
+.chat-input-bar {
+    display: flex;
+    gap: 0.6rem;
+    padding: 1rem 1.25rem;
+    background: var(--color-surface);
+    border-top: 1px solid var(--color-border);
+}
+
+.chat-input-bar .form-control {
+    border-radius: 999px;
+    padding-left: 1.1rem;
+}
+
+.btn-send {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: var(--gradient-brand);
+    color: #fff;
+    border: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.05rem;
+    flex-shrink: 0;
+    box-shadow: 0 4px 14px rgba(37, 99, 235, 0.3);
+    transition: filter 0.15s ease, transform 0.15s ease;
+}
+
+.btn-send:hover {
+    filter: brightness(1.08);
+    transform: translateY(-1px);
+    color: #fff;
+}
+
+/* ---------------- Footer ---------------- */
+
+.app-footer {
+    color: var(--color-muted);
+    border-top: 1px solid var(--color-border);
+    background: var(--color-surface);
+}
