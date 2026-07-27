@@ -1,4 +1,11 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page import="util.Constants" %>
+<%
+    if (session.getAttribute(Constants.SESSION_USER_ID) != null) {
+        response.sendRedirect(request.getContextPath() + "/" + Constants.DASHBOARD_PAGE);
+        return;
+    }
+%>
 <!DOCTYPE html>
 <html lang="en">
 <head>

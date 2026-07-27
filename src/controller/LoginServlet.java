@@ -78,6 +78,12 @@ public class LoginServlet extends HttpServlet {
             return;
         }
 
+        HttpSession session = request.getSession(false);
+        if (session != null && session.getAttribute(Constants.SESSION_USER_ID) != null) {
+            response.sendRedirect(request.getContextPath() + "/" + Constants.DASHBOARD_PAGE);
+            return;
+        }
+
         request.getRequestDispatcher("login.jsp").forward(request, response);
     }
 }
