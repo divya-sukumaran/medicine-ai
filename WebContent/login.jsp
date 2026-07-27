@@ -44,10 +44,6 @@
                     Sign in <i class="bi bi-arrow-right ms-1"></i>
                 </button>
             </form>
-
-            <p class="text-center mt-4 mb-0 text-muted">
-                New here? <a href="register.jsp" class="fw-semibold text-decoration-none">Create an account</a>
-            </p>
         </div>
     </div>
 </div>
